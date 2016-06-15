@@ -7,19 +7,10 @@
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/scanner_qr"
-            android:gravity="center"
+            android:id="@+id/button_scan"
+            android:layout_marginTop="@dimen/one_hundred_eighty_dp"
             android:layout_gravity="center_horizontal"
-            android:text="Scan QR Code">
-    </Button>
-
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/scanner_barcode"
-            android:gravity="center"
-            android:layout_gravity="center_horizontal"
-            android:text="Scan BAR Code">
+            android:text="@string/scan">
     </Button>
 
 </LinearLayout>

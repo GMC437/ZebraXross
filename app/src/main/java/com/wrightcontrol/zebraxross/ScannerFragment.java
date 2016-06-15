@@ -1,22 +1,23 @@
 package com.wrightcontrol.zebraxross;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 /**
  * Created by Grant on 08/06/2016.
  */
 public class ScannerFragment extends Fragment {
 
-    private Button QRButton;
-    private Button BARButton;
+    private String toastMessage;
+    private Button scanButton;
 
     public static ScannerFragment newInstance() {
         return new ScannerFragment();
@@ -32,32 +33,40 @@ public class ScannerFragment extends Fragment {
     }
 
     private void instantiateWidgets(View view) {
-        try {
-            QRButton = (Button) view.findViewById(R.id.scanner_qr);
-            QRButton.setOnClickListener(new View.OnClickListener() {
+        scanButton = (Button) view.findViewById(R.id.button_scan);
+        scanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scanFromFragment();
+            }
+        });
+    }
 
-                public void onClick(View v) {
-                    Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-                    intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-                    startActivityForResult(intent, 0);
-                }
+    public void scanFromFragment() {
+        IntentIntegrator.forSupportFragment(this).initiateScan();
+    }
 
-            });
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            if (result.getContents() == null) {
+                toastMessage = "Cancelled from fragment";
+            } else {
+                toastMessage = "Scanned from fragment: " + result.getContents();
+            }
 
-            BARButton = (Button) view.findViewById(R.id.scanner_barcode);
-            BARButton.setOnClickListener(new View.OnClickListener() {
-
-                public void onClick(View v) {
-                    Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-                    intent.putExtra("SCAN_MODE", "PRODUCT_MODE");
-                    startActivityForResult(intent, 0);
-                }
-
-            });
-
-        } catch (ActivityNotFoundException anfe) {
-            Log.e("onCreate", "Scanner Not Found", anfe);
+            // At this point we may or may not have a reference to the activity
+            displayToast();
         }
 
+
+    }
+
+    private void displayToast() {
+        if (getActivity() != null && toastMessage != null) {
+            Toast.makeText(getActivity(), toastMessage, Toast.LENGTH_LONG).show();
+            toastMessage = null;
+        }
     }
 }
