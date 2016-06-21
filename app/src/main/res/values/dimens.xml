@@ -3,5 +3,8 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+
+    <dimen name="one_hundred_dp">100dp</dimen>
+    <dimen name="one_hundred_forty_dp">140dp</dimen>
     <dimen name="one_hundred_eighty_dp">180dp</dimen>
 </resources>
